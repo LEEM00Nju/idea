@@ -134,8 +134,8 @@ function App() {
       )}
 
       <footer className="app-footer">
-        <span>{hasFallbackPlan ? 'Fallback-ready planning active' : 'Agent-orchestrated planning active'}</span>
-        <span>Azure-ready logging uses minimal plan metadata only.</span>
+        <span>{hasFallbackPlan ? '대체 방식으로 일정 생성됨' : 'AI 에이전트로 일정 생성됨'}</span>
+        <span>Azure 로깅은 최소한의 일정 메타데이터만 사용합니다.</span>
       </footer>
     </main>
   )

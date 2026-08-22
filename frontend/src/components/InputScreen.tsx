@@ -12,6 +12,12 @@ type InputScreenProps = {
   onSubmit: () => void
 }
 
+const urgencyLabels: Record<Urgency, string> = {
+  high: '높음',
+  medium: '보통',
+  low: '낮음',
+}
+
 const urgencyOptions: Urgency[] = ['high', 'medium', 'low']
 
 export function InputScreen({
@@ -29,16 +35,16 @@ export function InputScreen({
     <section className="screen">
       <div className="hero-card">
         <span className="badge">RhythmPilot</span>
-        <h1>Sleep-aware daily planning in two steps</h1>
+        <h1>수면을 반영한 하루 일정, 두 단계로</h1>
         <p>
-          Enter your sleep and tasks, then review an AI-labeled schedule before you start anything.
+          수면 시간과 할 일을 입력하면 AI가 최적화된 일정을 제안합니다. 시작 전 반드시 직접 확인하세요.
         </p>
       </div>
 
       <div className="panel">
         <div className="panel__grid">
           <label>
-            <span>Sleep hours last night</span>
+            <span>어젯밤 수면 시간 (시간)</span>
             <input
               min="0"
               max="24"
@@ -49,7 +55,7 @@ export function InputScreen({
             />
           </label>
           <label>
-            <span>Start time</span>
+            <span>시작 시간</span>
             <input
               type="time"
               value={form.startTime}
@@ -60,11 +66,11 @@ export function InputScreen({
 
         <div className="tasks-header">
           <div>
-            <h2>Today&apos;s tasks</h2>
-            <p>Each task needs a title, urgency, and estimate.</p>
+            <h2>오늘의 할 일</h2>
+            <p>각 작업에 제목, 우선순위, 예상 시간을 입력하세요.</p>
           </div>
           <button className="secondary-button" type="button" onClick={onAddTask}>
-            Add task
+            작업 추가
           </button>
         </div>
 
@@ -72,9 +78,9 @@ export function InputScreen({
           {form.tasks.map((task, index) => (
             <div className="task-card" key={`${task.title}-${index}`}>
               <label className="task-card__title">
-                <span>Task</span>
+                <span>작업 이름</span>
                 <input
-                  placeholder="Write project proposal"
+                  placeholder="프로젝트 제안서 작성"
                   type="text"
                   value={task.title}
                   onChange={(event) => onTaskChange(index, 'title', event.target.value)}
@@ -82,21 +88,21 @@ export function InputScreen({
               </label>
 
               <label>
-                <span>Urgency</span>
+                <span>우선순위</span>
                 <select
                   value={task.urgency}
                   onChange={(event) => onTaskChange(index, 'urgency', event.target.value as Urgency)}
                 >
                   {urgencyOptions.map((urgency) => (
                     <option key={urgency} value={urgency}>
-                      {urgency}
+                      {urgencyLabels[urgency]}
                     </option>
                   ))}
                 </select>
               </label>
 
               <label>
-                <span>Estimate (min)</span>
+                <span>예상 시간 (분)</span>
                 <input
                   min="15"
                   max="480"
@@ -113,7 +119,7 @@ export function InputScreen({
                 type="button"
                 onClick={() => onRemoveTask(index)}
               >
-                Remove
+                삭제
               </button>
             </div>
           ))}
@@ -121,7 +127,7 @@ export function InputScreen({
 
         {errors.length > 0 ? (
           <div className="error-box" role="alert">
-            <strong>Fix these inputs first:</strong>
+            <strong>입력값을 확인해 주세요:</strong>
             <ul>
               {errors.map((error) => (
                 <li key={error}>{error}</li>
@@ -132,11 +138,12 @@ export function InputScreen({
 
         <div className="actions">
           <button className="primary-button" disabled={isSubmitting} type="button" onClick={onSubmit}>
-            {isSubmitting ? 'Building your schedule…' : 'Generate schedule'}
+            {isSubmitting ? '일정 생성 중…' : '일정 생성'}
           </button>
-          <p className="hint">Core value is delivered within 3 clicks: input, generate, confirm.</p>
+          <p className="hint">입력 → 생성 → 확인, 3단계로 오늘 하루를 계획하세요.</p>
         </div>
       </div>
     </section>
   )
 }
+
