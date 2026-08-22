@@ -13,10 +13,10 @@
 .panel,
 .summary-card,
 .plan-block {
-  border: 1px solid rgba(148, 163, 184, 0.22);
+  border: 1px solid #e2e8f0;
   border-radius: 24px;
-  background: rgba(15, 23, 42, 0.72);
-  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.28);
+  background: #ffffff;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.08);
 }
 
 .hero-card {
@@ -31,6 +31,7 @@
 .panel h2,
 .summary-card h2 {
   margin: 0 0 12px;
+  color: #0f172a;
 }
 
 .badge {
@@ -38,15 +39,15 @@
   margin-bottom: 12px;
   padding: 6px 12px;
   border-radius: 999px;
-  background: rgba(34, 197, 94, 0.16);
-  color: #86efac;
+  background: #dcfce7;
+  color: #16a34a;
   font-size: 0.85rem;
   font-weight: 600;
 }
 
 .badge--muted {
-  background: rgba(250, 204, 21, 0.14);
-  color: #fde68a;
+  background: #fef9c3;
+  color: #ca8a04;
 }
 
 .panel {
@@ -101,7 +102,9 @@
   align-items: end;
   padding: 16px;
   border-radius: 18px;
-  background: rgba(30, 41, 59, 0.7);
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  box-shadow: none;
 }
 
 .task-card__title {
@@ -120,13 +123,16 @@
   flex: 1 1 260px;
   padding: 24px;
   align-self: start;
+  background: #f0f9ff;
+  border-color: #bae6fd;
 }
 
 .summary-card__section {
   margin: 20px 0;
   padding: 16px;
   border-radius: 16px;
-  background: rgba(30, 41, 59, 0.72);
+  background: #e0f2fe;
+  border: 1px solid #7dd3fc;
 }
 
 .plan-block {
@@ -138,32 +144,93 @@
 .plan-block__time {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   gap: 12px;
   font-size: 0.95rem;
 }
 
 .plan-block--high {
-  border-color: rgba(248, 113, 113, 0.5);
+  background: #fff1f2;
+  border-color: #fca5a5;
 }
 
 .plan-block--medium {
-  border-color: rgba(96, 165, 250, 0.5);
+  background: #eff6ff;
+  border-color: #93c5fd;
 }
 
 .plan-block--low {
-  border-color: rgba(52, 211, 153, 0.5);
+  background: #f0fdf4;
+  border-color: #86efac;
 }
 
 .plan-block--rest {
-  border-color: rgba(250, 204, 21, 0.45);
+  background: #fefce8;
+  border-color: #fde047;
+}
+
+/* 체크박스 스타일 */
+.plan-block__header {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.plan-block__checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  border: 2px solid #94a3b8;
+  border-radius: 6px;
+  background: #ffffff;
+  cursor: pointer;
+  margin-top: 2px;
+  position: relative;
+  transition: all 0.15s ease;
+}
+
+.plan-block__checkbox:checked {
+  background: #3b82f6;
+  border-color: #3b82f6;
+}
+
+.plan-block__checkbox:checked::after {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 1px;
+  width: 8px;
+  height: 11px;
+  border: 2px solid #fff;
+  border-top: none;
+  border-left: none;
+  transform: rotate(45deg);
+}
+
+.plan-block__task {
+  margin: 0;
+  flex: 1;
+  transition: all 0.15s ease;
+}
+
+.plan-block__task--done {
+  text-decoration: line-through;
+  color: #94a3b8;
+}
+
+.plan-block--done {
+  opacity: 0.65;
 }
 
 .error-box {
   margin-top: 16px;
   padding: 16px 18px;
   border-radius: 18px;
-  background: rgba(127, 29, 29, 0.38);
-  color: #fecaca;
+  background: #fef2f2;
+  border: 1px solid #fca5a5;
+  color: #dc2626;
 }
 
 .primary-button,
@@ -184,37 +251,56 @@ select {
 }
 
 .primary-button {
-  background: linear-gradient(135deg, #38bdf8, #818cf8);
-  color: #020617;
+  background: linear-gradient(135deg, #3b82f6, #6366f1);
+  color: #ffffff;
   font-weight: 700;
 }
 
+.primary-button:hover:not(:disabled) {
+  background: linear-gradient(135deg, #2563eb, #4f46e5);
+}
+
 .secondary-button {
-  background: rgba(59, 130, 246, 0.12);
-  border-color: rgba(96, 165, 250, 0.35);
-  color: #dbeafe;
+  background: #eff6ff;
+  border-color: #93c5fd;
+  color: #1d4ed8;
+}
+
+.secondary-button:hover {
+  background: #dbeafe;
 }
 
 .ghost-button {
   background: transparent;
-  border-color: rgba(148, 163, 184, 0.3);
-  color: #e2e8f0;
+  border-color: #cbd5e1;
+  color: #475569;
+}
+
+.ghost-button:hover:not(:disabled) {
+  background: #f1f5f9;
 }
 
 input,
 select {
   width: 100%;
-  border: 1px solid rgba(148, 163, 184, 0.25);
-  background: rgba(15, 23, 42, 0.88);
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
   padding: 12px 14px;
-  color: #f8fafc;
+  color: #1e293b;
+}
+
+input:focus,
+select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
 }
 
 .meta-row,
 .hint,
 .app-footer,
 .plan-block__time span {
-  color: #cbd5e1;
+  color: #64748b;
   font-size: 0.92rem;
 }
 
@@ -298,3 +384,4 @@ select {
     align-items: flex-start;
   }
 }
+

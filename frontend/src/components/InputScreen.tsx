@@ -12,18 +12,13 @@ type InputScreenProps = {
   onSubmit: () => void
 }
 
-function urgencyFromCheckboxes(isUrgent: boolean, isLong: boolean): Urgency {
-  const count = (isUrgent ? 1 : 0) + (isLong ? 1 : 0)
-  if (count === 2) return 'high'
-  if (count === 1) return 'medium'
-  return 'low'
+const urgencyLabels: Record<Urgency, string> = {
+  high: '높음',
+  medium: '보통',
+  low: '낮음',
 }
 
-function checkboxesFromUrgency(urgency: Urgency): { isUrgent: boolean; isLong: boolean } {
-  if (urgency === 'high') return { isUrgent: true, isLong: true }
-  if (urgency === 'medium') return { isUrgent: true, isLong: false }
-  return { isUrgent: false, isLong: false }
-}
+const urgencyOptions: Urgency[] = ['high', 'medium', 'low']
 
 export function InputScreen({
   form,
@@ -40,16 +35,16 @@ export function InputScreen({
     <section className="screen">
       <div className="hero-card">
         <span className="badge">RhythmPilot</span>
-        <h1>수면 패턴을 반영한 하루 일정 계획</h1>
+        <h1>수면을 반영한 하루 일정, 두 단계로</h1>
         <p>
-          수면 시간과 할 일을 입력하면, AI가 최적의 일정을 생성해 드립니다.
+          수면 시간과 할 일을 입력하면 AI가 최적화된 일정을 제안합니다. 시작 전 반드시 직접 확인하세요.
         </p>
       </div>
 
       <div className="panel">
         <div className="panel__grid">
           <label>
-            <span>어제 수면시간</span>
+            <span>어젯밤 수면 시간 (시간)</span>
             <input
               min="0"
               max="24"
@@ -71,8 +66,8 @@ export function InputScreen({
 
         <div className="tasks-header">
           <div>
-            <h2>오늘의 작업</h2>
-            <p>각 작업의 이름, 긴급도, 소요시간을 입력하세요.</p>
+            <h2>오늘의 할 일</h2>
+            <p>각 작업에 제목, 우선순위, 예상 시간을 입력하세요.</p>
           </div>
           <button className="secondary-button" type="button" onClick={onAddTask}>
             작업 추가
@@ -80,74 +75,59 @@ export function InputScreen({
         </div>
 
         <div className="task-list">
-          {form.tasks.map((task, index) => {
-            const { isUrgent, isLong } = checkboxesFromUrgency(task.urgency)
-            return (
-              <div className="task-card" key={index}>
-                <label className="task-card__title">
-                  <span>작업명</span>
-                  <input
-                    placeholder="예: 기획서 작성"
-                    type="text"
-                    value={task.title}
-                    onChange={(event) => onTaskChange(index, 'title', event.target.value)}
-                  />
-                </label>
+          {form.tasks.map((task, index) => (
+            <div className="task-card" key={`${task.title}-${index}`}>
+              <label className="task-card__title">
+                <span>작업 이름</span>
+                <input
+                  placeholder="프로젝트 제안서 작성"
+                  type="text"
+                  value={task.title}
+                  onChange={(event) => onTaskChange(index, 'title', event.target.value)}
+                />
+              </label>
 
-                <div className="urgency-field">
-                  <span>긴급도</span>
-                  <div className="urgency-checkboxes">
-                    <label className="checkbox-label">
-                      <input
-                        type="checkbox"
-                        checked={isUrgent}
-                        onChange={(event) => {
-                          onTaskChange(index, 'urgency', urgencyFromCheckboxes(event.target.checked, isLong))
-                        }}
-                      />
-                      <span>급함</span>
-                    </label>
-                    <label className="checkbox-label">
-                      <input
-                        type="checkbox"
-                        checked={isLong}
-                        onChange={(event) => {
-                          onTaskChange(index, 'urgency', urgencyFromCheckboxes(isUrgent, event.target.checked))
-                        }}
-                      />
-                      <span>긺</span>
-                    </label>
-                  </div>
-                </div>
-
-                <label>
-                  <span>소요시간 (분)</span>
-                  <input
-                    min="15"
-                    max="480"
-                    step="5"
-                    type="number"
-                    value={task.estimateMin}
-                    onChange={(event) => onTaskChange(index, 'estimateMin', Number(event.target.value))}
-                  />
-                </label>
-
-                <button
-                  className="ghost-button"
-                  disabled={form.tasks.length === 1}
-                  type="button"
-                  onClick={() => onRemoveTask(index)}
+              <label>
+                <span>우선순위</span>
+                <select
+                  value={task.urgency}
+                  onChange={(event) => onTaskChange(index, 'urgency', event.target.value as Urgency)}
                 >
-                  제거
-                </button>
-              </div>
-            )
-          })}
+                  {urgencyOptions.map((urgency) => (
+                    <option key={urgency} value={urgency}>
+                      {urgencyLabels[urgency]}
+                    </option>
+                  ))}
+                </select>
+              </label>
+
+              <label>
+                <span>예상 시간 (분)</span>
+                <input
+                  min="15"
+                  max="480"
+                  step="5"
+                  type="number"
+                  value={task.estimateMin}
+                  onChange={(event) => onTaskChange(index, 'estimateMin', Number(event.target.value))}
+                />
+              </label>
+
+              <button
+                className="ghost-button"
+                disabled={form.tasks.length === 1}
+                type="button"
+                onClick={() => onRemoveTask(index)}
+              >
+                삭제
+              </button>
+            </div>
+          ))}
         </div>
 
         {errors.length > 0 ? (
           <div className="error-box" role="alert">
-            <strong>입력 항목을 확인해 주세요:</strong>
+            <strong>입력값을 확인해 주세요:</strong>
             <ul>
               {errors.map((error) => (
                 <li key={error}>{error}</li>
@@ -160,9 +140,10 @@ export function InputScreen({
           <button className="primary-button" disabled={isSubmitting} type="button" onClick={onSubmit}>
             {isSubmitting ? '일정 생성 중…' : '일정 생성'}
           </button>
-          <p className="hint">입력 → 생성 → 확인, 세 단계로 완성됩니다.</p>
+          <p className="hint">입력 → 생성 → 확인, 3단계로 오늘 하루를 계획하세요.</p>
         </div>
       </div>
     </section>
   )
 }
+

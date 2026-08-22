@@ -10,6 +10,12 @@ type ResultScreenProps = {
   onConfirm: () => void
 }
 
+const napReasonLabels: Record<string, string> = {
+  'Sleep was sufficient, so sustained focus blocks are reasonable.':
+    '수면이 충분해서 장시간 집중 블록이 합리적입니다.',
+  'Not needed': '필요없음',
+}
+
 export function ResultScreen({
   plan,
   confirmed,
@@ -42,7 +48,7 @@ export function ResultScreen({
         <div className="meta-row">
           <span>요청 ID: {plan.requestId.slice(0, 8)}</span>
           <span>{new Date(plan.generatedAt).toLocaleString('ko-KR')}</span>
-          <span>{plan.fallbackUsed ? '대체 계획 사용' : '에이전트 파이프라인 완료'}</span>
+          <span>{plan.fallbackUsed ? '대체 방식 사용됨' : '생성 완료'}</span>
         </div>
       </div>
 
@@ -58,17 +64,17 @@ export function ResultScreen({
           </div>
 
           <aside className="summary-card">
-            <h2>실행 전 확인</h2>
+            <h2>확인</h2>
             <p>
               RhythmPilot은 아무것도 자동으로 시작하지 않습니다. 일정이 현실적으로 보일 때만 확인하세요.
             </p>
             <div className="summary-card__section">
-              <strong>낮잠 / 회복 안내</strong>
-              <p>{plan.napSuggestion.reason}</p>
+              <strong>낮잠/회복 안내</strong>
+              <p>{napReasonLabels[plan.napSuggestion.reason] ?? plan.napSuggestion.reason}</p>
               <span>{plan.napSuggestion.window}</span>
             </div>
             <button className="primary-button" type="button" onClick={onConfirm}>
-              {confirmed ? '일정 확인됨' : '일정 확인'}
+              {confirmed ? '일정 확인 완료' : '일정 확인'}
             </button>
           </aside>
         </div>
@@ -76,3 +82,5 @@ export function ResultScreen({
     </section>
   )
 }
+
+
