@@ -1,0 +1,27 @@
+{
+  "name": "rhythmpilot",
+  "version": "1.0.0",
+  "description": "수면시간(어젯밤)과 오늘의 할 일을 입력하면,   실행 가능한 시간 블록(집중/보조/휴식/낮잠)을 자동으로 생성하는 개인 생산성 향상 웹 앱입니다.",
+  "scripts": {
+    "test": "npm run test --workspace backend",
+    "dev": "concurrently \"npm run dev --workspace backend\" \"npm run dev --workspace frontend\"",
+    "build": "npm run build --workspace backend && npm run build --workspace frontend",
+    "lint": "npm run lint --workspace backend && npm run lint --workspace frontend",
+    "start": "npm run start --workspace backend"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://localhost:26831/LEEM00Nju/idea"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "devDependencies": {
+    "concurrently": "^10.0.5"
+  }
+}
