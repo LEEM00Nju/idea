@@ -7,7 +7,7 @@ import type { PlanRequest, PlanResponse, TaskInput } from './types'
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL ?? ''
 
 const defaultTask: TaskInput = {
-  title: 'Write project proposal',
+  title: '기획서 작성',
   estimateMin: 90,
   urgency: 'high',
 }
@@ -15,7 +15,7 @@ const defaultTask: TaskInput = {
 const defaultForm: PlanRequest = {
   sleepHours: 7,
   startTime: '09:00',
-  tasks: [defaultTask, { title: 'Inbox cleanup', estimateMin: 30, urgency: 'low' }],
+  tasks: [defaultTask, { title: '받은 메일 정리', estimateMin: 30, urgency: 'low' }],
 }
 
 function validateForm(form: PlanRequest): string[] {
@@ -136,6 +136,8 @@ function App() {
       <footer className="app-footer">
         <span>{hasFallbackPlan ? '대체 방식으로 일정 생성됨' : 'AI 에이전트로 일정 생성됨'}</span>
         <span>Azure 로깅은 최소한의 일정 메타데이터만 사용합니다.</span>
+        <span>{hasFallbackPlan ? '대체 계획 모드 활성' : '에이전트 파이프라인 활성'}</span>
+        <span>Azure 로깅은 최소한의 계획 메타데이터만 사용합니다.</span>
       </footer>
     </main>
   )
