@@ -51,8 +51,9 @@
 1. 사용자 입력(할 일, 수면시간)
 2. Frontend → `POST /api/plan`
 3. 오케스트레이터가 Agent 순차 호출
-   - Task Decomposer Agent
-   - Energy Planner Agent
+   - Task Decomposer Agent (Agent A)
+   - Energy Planner Agent (Agent B)
+   - Day Reviewer Agent (Agent C, 선택 기능)
 4. 결과 JSON 반환
 5. Frontend 결과 렌더링 + 저장(옵션)
 
@@ -62,7 +63,7 @@
 
 ### Step 1. 입력 정규화
 - 빈 값/형식 검증
-- 수면시간 범위 검증(예: 0~14시간)
+- 수면시간 범위 검증(예: 0~14시간, 14시간 초과 시 7시간 이상 기준 적용)
 
 ### Step 2. Task Decomposer Agent
 - 큰 작업을 20~30분 실행 단위로 분해
@@ -84,15 +85,15 @@
 
 ## 5) API 명세 (MVP)
 
-## POST `/api/plan`
+### POST `/api/plan`
 
 ### Request
 ```json
 {
   "sleepHours": 5.5,
   "tasks": [
-    { "title": "기획서 작성", "estimateMin": 120, "priority": "high" },
-    { "title": "이메일 정리", "estimateMin": 30, "priority": "low" }
+    { "title": "기획서 작성", "estimateMin": 120, "urgency": "high" },
+    { "title": "이메일 정리", "estimateMin": 30, "urgency": "low" }
   ],
   "startTime": "09:00"
 }
@@ -151,7 +152,7 @@
 - 25분 집중 + 5분 휴식
 - 오전 고집중, 오후 보조업무
 
-#### `sleepHours >= 7`
+#### `sleepHours >= 7` (14시간 초과도 동일 적용)
 - 고난도 우선 배치
 - 긴 집중 블록 허용(30~45분)
 
