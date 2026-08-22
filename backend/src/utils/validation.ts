@@ -49,10 +49,6 @@ function normalizeTask(task: unknown, index: number): TaskInput {
 }
 
 export function normalizeSleepHours(sleepHours: number): number {
-  if (sleepHours > 14) {
-    return 7
-  }
-
   return sleepHours
 }
 

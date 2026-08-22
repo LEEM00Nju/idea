@@ -55,6 +55,7 @@ The backend serves `frontend/dist` automatically in production, which makes a si
 - `COPILOT_SDK_ENABLED` - set to `true` to enable GitHub Copilot SDK calls
 - `COPILOT_MODEL` - optional model override (default `gpt-5-mini`)
 - `AGENT_TIMEOUT_MS` - per-agent timeout before fallback (default `4000`)
+- `ALLOWED_ORIGIN` - allowed browser origin for CORS (default `http://localhost:5173`)
 - `AZURE_TABLES_CONNECTION_STRING` - optional Azure Table Storage connection string
 - `AZURE_TABLES_TABLE_NAME` - optional table name override
 - `APPLICATIONINSIGHTS_CONNECTION_STRING` - optional App Insights connection string

@@ -12,7 +12,7 @@ const AGENT_TIMEOUT_MS = Number(process.env.AGENT_TIMEOUT_MS ?? 4000)
 const AGENT_RETRY_COUNT = 1
 
 function summarizePlan(request: PlanRequest, fallbackUsed: boolean): string {
-  const normalizedSleepHours = request.sleepHours > 14 ? 7 : request.sleepHours
+  const normalizedSleepHours = request.sleepHours
 
   if (fallbackUsed) {
     return 'Rule-based fallback plan generated after an agent issue.'
@@ -126,6 +126,8 @@ export class PlanOrchestrator {
       })
 
       return fallback.response
+    } finally {
+      await this.frameworkState.delete([requestId]).catch(() => undefined)
     }
   }
 
@@ -134,12 +136,20 @@ export class PlanOrchestrator {
 
     for (let attempt = 0; attempt <= AGENT_RETRY_COUNT; attempt += 1) {
       try {
-        return await Promise.race([
-          work(),
-          new Promise<T>((_, reject) =>
-            setTimeout(() => reject(new Error(`${agentName} timed out`)), AGENT_TIMEOUT_MS),
-          ),
-        ])
+        let timeoutId: NodeJS.Timeout | undefined
+
+        try {
+          return await Promise.race([
+            work(),
+            new Promise<T>((_, reject) => {
+              timeoutId = setTimeout(() => reject(new Error(`${agentName} timed out`)), AGENT_TIMEOUT_MS)
+            }),
+          ])
+        } finally {
+          if (timeoutId) {
+            clearTimeout(timeoutId)
+          }
+        }
       } catch (error) {
         lastError = error
         logger.warn('Agent attempt failed', {
