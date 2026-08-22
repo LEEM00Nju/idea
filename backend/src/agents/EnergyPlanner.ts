@@ -75,7 +75,7 @@ Schedule subtasks into a realistic day plan based on sleep duration.
 Rules:
 - sleepHours < 5: keep blocks short and avoid repeated high-intensity blocks
 - 5 <= sleepHours < 7: place high focus work early with short breaks
-- sleepHours >= 7 or sleepHours > 14: allow longer focus blocks
+- sleepHours >= 7: allow longer focus blocks
 - preserve the priority order from the provided subtasks
 - never provide medical advice
 

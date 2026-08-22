@@ -12,7 +12,11 @@ const port = Number(process.env.PORT ?? 3001)
 const currentDirectory = path.dirname(fileURLToPath(import.meta.url))
 const frontendDist = path.resolve(currentDirectory, '../../frontend/dist')
 
-app.use(cors())
+app.use(
+  cors({
+    origin: process.env.ALLOWED_ORIGIN ?? 'http://localhost:5173',
+  }),
+)
 app.use(express.json({ limit: '1mb' }))
 
 app.get('/health', (_req, res) => {
