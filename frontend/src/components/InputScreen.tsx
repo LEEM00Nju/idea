@@ -12,17 +12,17 @@ type InputScreenProps = {
   onSubmit: () => void
 }
 
-function urgencyFromCheckboxes(ggeupham: boolean, gilm: boolean): Urgency {
-  const count = (ggeupham ? 1 : 0) + (gilm ? 1 : 0)
+function urgencyFromCheckboxes(isUrgent: boolean, isLong: boolean): Urgency {
+  const count = (isUrgent ? 1 : 0) + (isLong ? 1 : 0)
   if (count === 2) return 'high'
   if (count === 1) return 'medium'
   return 'low'
 }
 
-function checkboxesFromUrgency(urgency: Urgency): { ggeupham: boolean; gilm: boolean } {
-  if (urgency === 'high') return { ggeupham: true, gilm: true }
-  if (urgency === 'medium') return { ggeupham: true, gilm: false }
-  return { ggeupham: false, gilm: false }
+function checkboxesFromUrgency(urgency: Urgency): { isUrgent: boolean; isLong: boolean } {
+  if (urgency === 'high') return { isUrgent: true, isLong: true }
+  if (urgency === 'medium') return { isUrgent: true, isLong: false }
+  return { isUrgent: false, isLong: false }
 }
 
 export function InputScreen({
@@ -81,7 +81,7 @@ export function InputScreen({
 
         <div className="task-list">
           {form.tasks.map((task, index) => {
-            const { ggeupham, gilm } = checkboxesFromUrgency(task.urgency)
+            const { isUrgent, isLong } = checkboxesFromUrgency(task.urgency)
             return (
               <div className="task-card" key={index}>
                 <label className="task-card__title">
@@ -100,9 +100,9 @@ export function InputScreen({
                     <label className="checkbox-label">
                       <input
                         type="checkbox"
-                        checked={ggeupham}
+                        checked={isUrgent}
                         onChange={(event) => {
-                          onTaskChange(index, 'urgency', urgencyFromCheckboxes(event.target.checked, gilm))
+                          onTaskChange(index, 'urgency', urgencyFromCheckboxes(event.target.checked, isLong))
                         }}
                       />
                       <span>급함</span>
@@ -110,9 +110,9 @@ export function InputScreen({
                     <label className="checkbox-label">
                       <input
                         type="checkbox"
-                        checked={gilm}
+                        checked={isLong}
                         onChange={(event) => {
-                          onTaskChange(index, 'urgency', urgencyFromCheckboxes(ggeupham, event.target.checked))
+                          onTaskChange(index, 'urgency', urgencyFromCheckboxes(isUrgent, event.target.checked))
                         }}
                       />
                       <span>긺</span>
